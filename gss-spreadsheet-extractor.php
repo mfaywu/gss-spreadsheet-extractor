@@ -4,8 +4,10 @@
  * Plugin URI: https://github.com/abassouk/gss-spreadsheet-extractor
  * Description: Retrieves data from a public Google Spreadsheet and makes the contents available in posts and pages. 
  * Version: 1.0.0
- * Author: Tassos Bassoukos
+ * Author: Tassos Bassoukos <abassouk@gmail.com>, Meitar Moscovitz <meitar@maymay.net>
+ * Author URL: https://github.com/abassouk
  * License: GPLv3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  */
 class GoogleSpreadsheetExtractor {
 	private $shortcode = 'gss';
