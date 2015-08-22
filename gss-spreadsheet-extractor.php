@@ -24,9 +24,9 @@ class GoogleSpreadsheetExtractor {
 				$this,
 				'displayRowId' 
 		) );
-		add_shortcode ( $this->shortcode . '_link', array (
+		add_shortcode ( $this->shortcode . '_template', array (
 				$this,
-				'displayLink' 
+				'displayTemplate' 
 		) );
 		add_shortcode ( $this->shortcode . '_cell', array (
 				$this,
@@ -328,17 +328,17 @@ class GoogleSpreadsheetExtractor {
 		$results = $this->results ();
 		return $results [$rid] [$cid];
 	}
-	public function displayLink($atts, $content = null) {
+	public function displayTemplate($atts, $content = null) {
 		$x = shortcode_atts ( array (
 				'row' => 0,
 				'column' => 0,
-				'tag' => 'a',
-				'attr' => 'href' 
-		), $atts, $this->shortcode . '_link' );
+				'token' => '__CELL__' 
+		), $atts, $this->shortcode . '_template' );
 		$rid = $this->findRow ( $x );
 		$cid = $x ['column'] - 1;
 		$results = $this->results ();
-		return "<" . $x ['tag'] . " " . $x ['attr'] . "=\"" . htmlspecialchars ( $results [$rid] [$cid] ) . "\">" . do_shortcode ( $content ) . "</" . $x ['tag'] . ">";
+		$html = do_shortcode ( $content );
+		return str_replace ( $x ['token'], htmlspecialchars ( $results [$rid] [$cid] ), $html );
 	}
 	public function displayIfExists($atts, $content = null) {
 		$x = shortcode_atts ( array (
@@ -360,8 +360,7 @@ class GoogleSpreadsheetExtractor {
 				return "";
 			}
 		}
-		$html .= do_shortcode ( $content );
-		$html = preg_replace ( '/<\/?p>/', '', $html );
+		$html = preg_replace ( '/<\/?p>/', '', do_shortcode ( $content ) );
 		return $html;
 	}
 }

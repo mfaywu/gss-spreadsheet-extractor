@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: abasoukos, meitar
+Contributors: abassouk, meitar
 Tags: Google Docs, Google, Spreadsheet, shortcode
 Requires at least: 4.2
 Tested up to: 4.3
@@ -84,17 +84,18 @@ or the row from an eclosing gss_repeat will be used. This allows loops to be use
 The page pointed to by the link can also use constructs like [gss_cell column="5"] (after loading the spreadsheet with the exact same gss_load) and the row id
 will be consistent between the originating page and the target page.
 
-4. Create links with gss_link
+4. Create links with gss_template
 
-Wordpress does not allow shortcodes in HTML attributes, so gss_link is a workaround: [gss_link column="23" tag="img" attr="src" /] creates an img tag 
-with an src attribute that has the value of the current row, column 23 from the loaded spreadsheet. The parameters are:
+Wordpress does not allow shortcodes in HTML attributes, so gss_template is a workaround: 
+
+    [gss_template column=23 token="__IMG__" ]<img src="__IMG__" />[/gss_template]
+
+creates an img tag with an src attribute that has the value of the current row, column 23 from the loaded spreadsheet. The parameters are:
 * row: The row to use; if omitted then normal row resolution is performed as per the gss_cell entry.
 * column: mandatory, the column that has the well-formed link to the image.
-* tag (default "a"): the tag name to use when creating a link.
-* attr (default "href"): the attribute to use when creating a link.
- 
-Keep in mind that this shortcode can have content: f.e. [gss_link column=10][gss_cell column=11][/gss_link] will create a link to the 10th column, with text
-taken from the 11th.
+* token (default "__TOKEN__"): the token to replace with the contents of the cell.
+
+Please be aware that this might be an XSS vulnerability; keep track of the content added to your spreadsheet.  
 
 5. Conditional rendering with gss_if
 
