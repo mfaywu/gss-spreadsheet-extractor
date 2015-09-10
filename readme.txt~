@@ -105,11 +105,3 @@ a column is nonempty (or multiple columns are nonempty). Parameters:
 * column: the column to check for a value
 * columns: a coma-separated list of column numbers
 The content is rendered only if all cells referenced (row x (column + columns)) are non-empty.
-
-
-===========================
-Functionality added
-[gss_changeNum] will choose a weighted random entry in the spreadsheet
-[gss_cell column="x"] will display x column of the entry picked by [gss_changeNum]
-
-This is adapted for SMG which will use the plugin to display a different cafe each time the Wordpress page is refreshed.
