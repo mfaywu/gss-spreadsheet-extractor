@@ -30,6 +30,10 @@ class GoogleSpreadsheetExtractor {
 				$this,
 				'getDocData'
 		) );
+		add_shortcode ( $this->shortcode . '_testingdata', array (
+				$this,
+				'testingGetData'
+		) );
 		add_shortcode ( $this->shortcode . '_repeat', array (
 				$this,
 				'displayRepeatLoop' 
@@ -61,7 +65,6 @@ class GoogleSpreadsheetExtractor {
 	}
 	public function changeNumber() {
 		$maxItem = $this->getDocData() - 1; 
-
 		$total = 0;
 		for ($x = 1; $x <= $maxItem / 2; $x++) {
 			$total += (1 + $maxItem);
@@ -69,9 +72,7 @@ class GoogleSpreadsheetExtractor {
 		if($maxItem % 2 != 0) {
 			$total += (($maxItem / 2) + 1);
 		}
-
 		$realRandNumber = rand(0, $total);
-
 		$count = 0;
 		$found = false;
 		for ($x = 0; $x <= $maxItem && !$found; $x++) {
@@ -83,13 +84,19 @@ class GoogleSpreadsheetExtractor {
 				$count += $x + 1;
 			}
 		}
-		return "ChangedNumber rRN = " . $realRandNumber . " rN = " . $this->randNumber; //TODO: DEL 
+		return "Testing: ChangedNumber rRN = " . $realRandNumber . " rN = " . $this->randNumber; //TODO: DEL 
 	}
 	public function getNumber() { 
 		return $this->randNumber;
 	}
 	public function getDocData() { //TODO
 		return sizeof($this->results());
+	}
+	public function testingGetData() {
+		$st = "";
+		foreach ( $this->results() ) {
+			
+		}
 	}
 	private function getDocUrl($key, $gid) {
 		$url = '';
