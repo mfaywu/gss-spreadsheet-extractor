@@ -11,10 +11,24 @@
  */
 class GoogleSpreadsheetExtractor {
 	private $shortcode = 'gss';
+	private $randNumber;
 	public function __construct() {
+		$this->randNumber = 50;
 		add_shortcode ( $this->shortcode . '_load', array (
 				$this,
 				'loadDocument' 
+		) );
+		add_shortcode ($this->shortcode . '_pickedNum', array (
+				$this,
+				'getNumber'
+		) );
+		add_shortcode ($this->shortcode . '_changeNum', array (
+				$this,
+				'changeNumber'
+		) );
+		add_shortcode ( $this->shortcode .'_docdata', array (
+				$this,
+				'getDocData'
 		) );
 		add_shortcode ( $this->shortcode . '_repeat', array (
 				$this,
@@ -44,6 +58,38 @@ class GoogleSpreadsheetExtractor {
 	public function add_query_vars_filter($vars) {
 		$vars [] = "rid";
 		return $vars;
+	}
+	public function changeNumber() {
+		$maxItem = $this->getDocData() - 1; 
+
+		$total = 0;
+		for ($x = 1; $x <= $maxItem / 2; $x++) {
+			$total += (1 + $maxItem);
+		}
+		if($maxItem % 2 != 0) {
+			$total += (($maxItem / 2) + 1);
+		}
+
+		$realRandNumber = rand(0, $total);
+
+		$count = 0;
+		$found = false;
+		for ($x = 0; $x <= $maxItem && !$found; $x++) {
+			if($count >= $realRandNumber) {
+				$this->randNumber = $x;
+				$found = true;
+			}
+			else {
+				$count += $x + 1;
+			}
+		}
+		return "ChangedNumber rRN = " . $realRandNumber . " rN = " . $this->randNumber; //TODO: DEL 
+	}
+	public function getNumber() { 
+		return $this->randNumber;
+	}
+	public function getDocData() { //TODO
+		return sizeof($this->results());
 	}
 	private function getDocUrl($key, $gid) {
 		$url = '';
@@ -326,7 +372,7 @@ class GoogleSpreadsheetExtractor {
 			return $rid;
 		}
 		$results = $this->results ();
-		return $results [$rid] [$cid];
+		return $results [$this->randNumber] [$cid];
 	}
 	public function displayTemplate($atts, $content = null) {
 		$x = shortcode_atts ( array (
@@ -338,7 +384,7 @@ class GoogleSpreadsheetExtractor {
 		$cid = $x ['column'] - 1;
 		$results = $this->results ();
 		$html = do_shortcode ( $content );
-		return str_replace ( $x ['token'], htmlspecialchars ( $results [$rid] [$cid] ), $html );
+		return str_replace ( $x ['token'], htmlspecialchars ( $results [$this->randNumber] [$cid] ), $html );
 	}
 	public function displayIfExists($atts, $content = null) {
 		$x = shortcode_atts ( array (
