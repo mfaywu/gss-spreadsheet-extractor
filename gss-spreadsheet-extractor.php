@@ -84,7 +84,7 @@ class GoogleSpreadsheetExtractor {
 				$count += $x + 1;
 			}
 		}
-		return "Testing: ChangedNumber rRN = " . $realRandNumber . " rN = " . $this->randNumber; //TODO: DEL 
+		return ""; 
 	}
 	public function getNumber() { 
 		return $this->randNumber;
@@ -135,7 +135,6 @@ class GoogleSpreadsheetExtractor {
 		return set_transient ( $transient, base64_encode ( serialize ( $data ) ), $expiry );
 	}
 	public function str_getcsv($str, $delimiter = ',', $enclosure = '"', $escape = '\\') {
-		echo "STr_get csv ; "; //TODO: DEL
 		$return = array ();
 		$realreturn = array ();
 		$fields = 0;
@@ -246,7 +245,6 @@ class GoogleSpreadsheetExtractor {
 	 * WordPress Shortcode handlers.
 	 */
 	public function loadDocument($atts, $content = null) {
-		echo "Loading doc ; "; //TODO: DEL
 		global $IGSV_RESULTS;
 		$x = shortcode_atts ( array (
 				'key' => false, // Google Doc URL or ID
@@ -255,7 +253,7 @@ class GoogleSpreadsheetExtractor {
 				'sortcolumn' => false, // If defined, sort first by this column.
 				'expires_in' => 3600,
 				'stale_in' => 60,
-				'use_cache' => false, //TODO: Change to true later 
+				'use_cache' => false,  
 				'collate' => 'en_US' 
 		), $atts, $this->shortcode . '_load' );
 		$gid = ($x ['gid']) ? $x ['gid'] : 0;
@@ -272,7 +270,6 @@ class GoogleSpreadsheetExtractor {
 		
 		$resp = $this->fetchData ( $this->getDocUrl ( $x ['key'], $x ['gid'] ) );
 		//if (false === $x ['use_cache'] || 'no' === strtolower ( $x ['use_cache'] )) {
-			echo "Delete transient yay ; ";
 			//delete_transient ( $transient );
 			//delete_transient ( $transient . "h" );
 			//delete_transient ( $transient . "s" );
@@ -305,10 +302,10 @@ class GoogleSpreadsheetExtractor {
 		//$this->setTransient ( $transient . "s", time () + $x ['stale_in'], ( int ) $x ['expire_in'] );
 		//$this->setTransient ( $transient . "h", hash ( 'sha1', $resp ['body'] ), ( int ) $x ['expire_in'] );
 		$IGSV_RESULTS = $r;
+		$this->changeNumber();
 		return "";
 	}
 	public function displayRepeatLoop($atts, $content = null) {
-		echo "Display Repeat Loop ; "; //TODO: DEL
 		$x = shortcode_atts ( array (
 				'sortcolumn' => 0, // If defined, sort first by this column.
 				'validcolumn' => 0, // If defined, this column will be tested for data, if false, row will be skipped.; validcondition is the value to test for
@@ -338,7 +335,6 @@ class GoogleSpreadsheetExtractor {
 		return $html;
 	}
 	public function displayRowId($atts) {
-		echo "Display row ID ; "; //TODO: DEL
 		$x = shortcode_atts ( array (
 				'row' => 0,
 				'column' => 0 
@@ -347,7 +343,6 @@ class GoogleSpreadsheetExtractor {
 		return $rid;
 	}
 	private function sortArray($results, $sortColumn, $collator = "en_US") {
-		echo "Sort array ; "; //TODO: DEL
 		$rv = array ();
 		$i = 0;
 		foreach ( $results as $row ) {
@@ -363,7 +358,6 @@ class GoogleSpreadsheetExtractor {
 		return $rv;
 	}
 	private function findRow($x) {
-		echo "find row ; "; //TODO: DEL
 		$rid = $x ['row'] - 1;
 		if ($rid < 0) {
 			$rid = get_query_var ( 'rid' );
@@ -376,7 +370,6 @@ class GoogleSpreadsheetExtractor {
 		return $rid;
 	}
 	public function displayCell($atts) {
-		echo "display cell ; "; //TODO: DEL
 		$x = shortcode_atts ( array (
 				'row' => 0,
 				'column' => 0 
@@ -390,7 +383,6 @@ class GoogleSpreadsheetExtractor {
 		return $results [$this->randNumber] [$cid];
 	}
 	public function displayTemplate($atts, $content = null) {
-		echo "display template ; "; //TODO: DEL
 		$x = shortcode_atts ( array (
 				'row' => 0,
 				'column' => 0,
@@ -403,7 +395,6 @@ class GoogleSpreadsheetExtractor {
 		return str_replace ( $x ['token'], htmlspecialchars ( $results [$this->randNumber] [$cid] ), $html );
 	}
 	public function displayIfExists($atts, $content = null) {
-		echo "display if exists ; "; //TODO: DEL
 		$x = shortcode_atts ( array (
 				'column' => 0,
 				'row' => 0,
