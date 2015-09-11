@@ -9,6 +9,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Introduces shortcodes that extract fields from a public Google Spreadsheet and display them in a post or page.
 
+*** See end of readme for edits to this fork ***
+
 == Description ==
 
 This plugin adds shortcodes for accessing Google Spreadsheets that allow you to:
@@ -108,8 +110,52 @@ The content is rendered only if all cells referenced (row x (column + columns)) 
 
 
 ===========================
-Functionality added
-[gss_changeNum] will choose a weighted random entry in the spreadsheet
-[gss_cell column="x"] will display x column of the entry picked by [gss_changeNum]
 
-This is adapted for SMG which will use the plugin to display a different cafe each time the Wordpress page is refreshed.
+Weighted Random Item Picker
+
+How to use:
+
+1. Loading: This is the only must have code. 
+Wherever you want to place your row pick, add: 
+[gss_load key="xxx" gid="0" strip="0"]
+where xxx is the key for your spreadsheet. See description above for how to find the key.
+Every time you refresh a page, the picked row will change. 
+
+2. To see the total number of items in your spreadsheet (testing purposes mainly), add:
+[gss_docdata]
+
+3. To see which row was picked (testing purposes mainly), add: 
+[gss_pickedNum]
+
+4. To display data from the columns of the row that was picked, add:
+[gss_cell column="x"]
+where x is the column you would like to display (starts from 1).
+
+5. To display data in a cell as a link, add:
+[gss_template column=10 token="__IMG__"]<a href="__IMG__"/>[gss_cell column="x"]</a>[/gss_template]
+
+6. To display data in a cell as an image, add: 
+[gss_template collumn=x token="__IMG__" ]<img src="__IMG__" />[/gss_template]
+Make sure the link to the image in the cell is a publicly available image on the web.
+
+-- 
+
+Here is a sample from a list of cafes that my project was used for (in the post section of wordpress): 
+
+[gss_load key="1qm-qu6GEy_ffdrDNUFB9PkGygMKQfvCxvPBC3EodPMc" gid="0" strip="0"]
+
+Total number of cafes: [gss_docdata] 
+Cafe picked: [gss_pickedNum]
+
+[gss_cell column="1"]
+[gss_cell column="3"]
+[gss_cell column="5"]
+[gss_cell column="9"]
+[gss_cell column="11"]
+[gss_template column=10 token="__IMG__"]<a href="__IMG__"/>[gss_cell column="10"]</a>[/gss_template]
+[gss_template column=13 token="__IMG__" ]<img src="__IMG__" />[/gss_template]
+
+--
+
+To edit the weighted random number picker, edit the changeNumber() function in gss-spreadsheet-extractor.php
+Currently, the weighted random number picker checks to see the total number of rows in the google spreadsheet and picks a random number with a probability that the the highest number is picked the greatest amount of times. For example, if you have 5 rows in your spreadsheet, in 15 picks, the first row will be picked once, the second twice, etc. 
